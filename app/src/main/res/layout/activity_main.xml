@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".MainActivity">
+
+    <RelativeLayout
+        android:id="@+id/nav_top"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_margin="20dp"
+        android:background="@drawable/button_bg"
+        android:elevation="5dp">
+
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/profile_image"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_margin="10dp"
+            android:src="@drawable/profil"
+            android:layout_centerVertical="true"/>
+
+        <TextView
+            android:id="@+id/hello_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_toRightOf="@id/profile_image"
+            android:text="Hai, Jhon!"
+            android:textColor="@color/colorWhite"
+            android:textSize="20sp" />
+
+    </RelativeLayout>
+
+    <ListView
+        android:id="@+id/list1"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:paddingTop="90dp"
+        android:divider="@null"
+        android:dividerHeight="0dp"
+        android:paddingBottom="80dp"
+        android:clipToPadding="false"
+        android:descendantFocusability="blocksDescendants"></ListView>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_alignParentBottom="true">
+        <Button
+            android:id="@+id/upload_btn"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:text="Upload"
+            android:textColor="@color/colorWhite"
+            android:textAllCaps="false"
+            android:textSize="20dp"
+            android:background="@drawable/button_bg"
+            android:layout_alignParentLeft="true"
+            android:layout_toLeftOf="@id/add_btn"
+            android:layout_margin="20dp"/>
+        <ImageButton
+            android:id="@+id/add_btn"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:src="@drawable/add_button_white"
+            android:textColor="@color/colorWhite"
+            android:textAllCaps="false"
+            android:background="@drawable/circle_btn_bg"
+            android:layout_alignParentRight="true"
+            android:layout_marginTop="20dp"
+            android:layout_marginRight="20dp"
+            android:layout_marginBottom="20dp"/>
+    </RelativeLayout>
+</RelativeLayout>

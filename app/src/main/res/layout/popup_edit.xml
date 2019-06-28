@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="250dp"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_gravity="center"
+    android:layout_marginLeft="0dp"
+    android:layout_marginRight="0dp"
+    android:gravity="center">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_gravity="center_vertical"
+        android:gravity="center_vertical"
+        android:orientation="vertical">
+
+        <android.support.v7.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="180dp"
+            android:layout_gravity="center"
+            android:layout_marginEnd="30dp"
+            android:layout_marginStart="30dp"
+            app:cardCornerRadius="8dp"
+            app:cardElevation="15dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="14dp"
+                android:gravity="center"
+                android:text="Yakin ingin kembali?"
+                android:textColor="@android:color/black"
+                android:textSize="20dp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginEnd="20dp"
+                android:layout_marginStart="20dp"
+                android:gravity="center"
+                android:text="Dengan memilih 'Ok', maka perubahan yang dilakukan tidak akan tersimpan"
+                android:textSize="18dp"
+                android:textStyle="bold" />
+
+        </android.support.v7.widget.CardView>
+    </LinearLayout>
+
+    <Button
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_gravity="center"
+        android:id="@+id/frmNo2"
+        android:layout_marginRight="45dp"
+        android:layout_marginTop="90dp"
+        android:text="No"
+        android:textColor="@color/colorWhite"
+        android:textAllCaps="false"
+        android:background="@drawable/no_bg"/>
+
+    <Button
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_gravity="center"
+        android:id="@+id/frmOk2"
+        android:layout_marginLeft="45dp"
+        android:layout_marginTop="90dp"
+        android:text="Ok"
+        android:textColor="@color/colorWhite"
+        android:textAllCaps="false"
+        android:background="@drawable/yes_bg"/>
+
+</FrameLayout>

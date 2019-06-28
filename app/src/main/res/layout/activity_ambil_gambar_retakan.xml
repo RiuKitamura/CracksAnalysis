@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".AmbilGambarRetakan">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginRight="20dp"
+            android:layout_marginLeft="20dp"
+            android:textAlignment="center"
+            android:text="Ambil gambar retakan dari struktur bangunan, seperti contoh di bawah"/>
+        <ImageView
+            android:layout_width="250dp"
+            android:layout_height="250dp"
+            android:layout_gravity="center_horizontal"
+            android:layout_margin="20dp"
+            android:layout_marginRight="20dp"
+            android:layout_marginLeft="20dp"
+            android:background="@drawable/retakan"/>
+        <Button
+            android:id="@+id/galery_btn"
+            android:layout_width="250dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:text="Gallery"
+            android:textAllCaps="false"
+            android:background="@drawable/button_bg"
+            android:textColor="@color/colorWhite"/>
+
+        <Button
+            android:id="@+id/camera_btn"
+            android:layout_marginTop="20dp"
+            android:layout_width="250dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:text="Camera"
+            android:textAllCaps="false"
+            android:background="@drawable/button_bg"
+            android:textColor="@color/colorWhite"/>
+
+        <ImageView
+            android:id="@+id/baris_1"
+            android:layout_width="150dp"
+            android:layout_height="150dp"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="20dp"/>
+        <ImageView
+            android:id="@+id/baris_2"
+            android:layout_width="150dp"
+            android:layout_height="150dp"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="20dp"/>
+        <ImageView
+            android:id="@+id/baris_3"
+            android:layout_width="150dp"
+            android:layout_height="150dp"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="20dp"/>
+        <ImageView
+            android:id="@+id/baris_4"
+            android:layout_width="150dp"
+            android:layout_height="150dp"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="20dp"/>
+    </LinearLayout>
+
+</ScrollView>
