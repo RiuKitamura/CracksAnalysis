@@ -1,13 +1,18 @@
 package com.example.cracksanalysis;
 
 import android.content.Context;
+import android.content.res.Resources;
+import android.graphics.drawable.Drawable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import java.util.ArrayList;
+
+import de.hdodenhof.circleimageview.CircleImageView;
 
 public class HistoryListAdapter extends BaseAdapter {
 
@@ -38,7 +43,7 @@ public class HistoryListAdapter extends BaseAdapter {
     }
 
     class ViewHolder{
-        //        CircleImageView imageView;
+        ImageView imageView;
         TextView textName, textAlamat;
     }
     @Override
@@ -52,6 +57,7 @@ public class HistoryListAdapter extends BaseAdapter {
             row = inflater.inflate(layout,null);
             holder.textName = row.findViewById(R.id.nama_bg_txt);
             holder.textAlamat = row.findViewById(R.id.alamat_bg_txt);
+            holder.imageView = row.findViewById(R.id.icon_history);
 //            holder.imageView = row.findViewById(R.id.poto_bangunan);
             row.setTag(holder);
         }
@@ -63,6 +69,10 @@ public class HistoryListAdapter extends BaseAdapter {
 
         holder.textName.setText(model.getNama_b());
         holder.textAlamat.setText(model.getAlamat_b());
+        System.out.println("jjjjjjjjkjkjkjkjkjkjkjkjjkkjkjkjkjkjkjkjkjjkjkjkjkj"+model.getKepercayaan());
+        if(model.getKepercayaan()!=0){
+            holder.imageView.setBackground(context.getResources().getDrawable(R.drawable.no_bg));
+        }
 
 //        byte[] recordImage = model.getPoto();
 //        Bitmap bitmap = BitmapFactory.decodeByteArray(recordImage,0,recordImage.length);

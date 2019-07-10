@@ -1,13 +1,18 @@
 package com.example.cracksanalysis;
 
+import android.Manifest;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.ColorMatrixColorFilter;
 import android.graphics.Paint;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Environment;
 import android.provider.MediaStore;
+import android.support.annotation.NonNull;
+import android.support.annotation.RequiresApi;
 import android.support.v4.content.FileProvider;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -20,10 +25,22 @@ import android.widget.Toast;
 
 import com.theartofdev.edmodo.cropper.CropImage;
 
+import org.opencv.android.Utils;
+import org.opencv.core.Mat;
+import org.opencv.core.Rect;
+
+import java.io.BufferedWriter;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileWriter;
 import java.io.IOException;
+import java.io.PrintWriter;
+import java.io.UnsupportedEncodingException;
+import java.nio.ByteBuffer;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Locale;
 
 import static android.os.Environment.getExternalStoragePublicDirectory;
 
@@ -35,6 +52,11 @@ public class AmbilGambarRetakan extends AppCompatActivity {
     String pathToFile;
     double tmpx, tmpy;
     int panjang, lebar, tengahx, tengahy;
+
+    double d1, d2, d3, d4, dd1, dd2, dd3, dd4;
+    String data_txt;
+
+    private static final int WRITE_EXTERNAL = 1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -104,6 +126,7 @@ public class AmbilGambarRetakan extends AppCompatActivity {
         return image;
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.M)
     public  void onActivityResult(int requestCode, int resultCode, Intent data){
         super.onActivityResult(requestCode, resultCode,data);
 
@@ -127,16 +150,11 @@ public class AmbilGambarRetakan extends AppCompatActivity {
                 try {
                     mBitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), imageUri);
                     potongGambar(mBitmap);
+
+
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
-
-//                moveToUpdate(kode, 1);
-//                onBackPressed();
-
-                //Menampilkan Gambar pada ImageView
-//                Picasso.get().load(imageUri).into(poto);
-//                isi_gambar=true;
 
             }else if(requestCode == CropImage.CROP_IMAGE_ACTIVITY_RESULT_ERROR_CODE){
                 //Menangani Jika terjadi kesalahan
@@ -145,6 +163,33 @@ public class AmbilGambarRetakan extends AppCompatActivity {
                 Toast.makeText(getApplicationContext(), "Crop Image Error", Toast.LENGTH_SHORT).show();
             }
         }
+
+//        if(requestCode == CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE) {
+//            CropImage.ActivityResult result = CropImage.getActivityResult(data);
+//            if (resultCode == RESULT_OK) {
+//                Uri imageUri = result.getUri(); //Mengubah data image kedalam Uri
+//                Bitmap mBitmap = null;
+//                try {
+//                    mBitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), imageUri);
+//                    potongGambar(mBitmap);
+//                } catch (IOException e) {
+//                    e.printStackTrace();
+//                }
+//
+////                moveToUpdate(kode, 1);
+////                onBackPressed();
+//
+//                //Menampilkan Gambar pada ImageView
+////                Picasso.get().load(imageUri).into(poto);
+////                isi_gambar=true;
+//
+//            }else if(requestCode == CropImage.CROP_IMAGE_ACTIVITY_RESULT_ERROR_CODE){
+//                //Menangani Jika terjadi kesalahan
+//                String error = result.getError().toString();
+//                Log.d("Exception", error);
+//                Toast.makeText(getApplicationContext(), "Crop Image Error", Toast.LENGTH_SHORT).show();
+//            }
+//        }
 
     }
 
@@ -175,13 +220,28 @@ public class AmbilGambarRetakan extends AppCompatActivity {
 //    public void onBackPressed() {
 //        super.onBackPressed();
 //    }
+
+    void olahgambar(Bitmap gambar){
+        Bitmap image = convertBitmap(gambar);
+        Mat mat = new Mat();
+        Bitmap bmp32 = image.copy(Bitmap.Config.ARGB_8888, true);
+        Utils.bitmapToMat(bmp32, mat);
+        Rect roi = new Rect(0,0,227,57);
+        Mat cropped = new Mat(mat,roi);
+        System.out.println("jjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjj");
+        System.out.println(cropped.height()+" "+cropped.width());
+
+
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.M)
     void potongGambar(Bitmap gambar){
         Bitmap image = convertBitmap(gambar);
         int row = 4;
         int col = 1;
         panjang = image.getHeight();
         lebar = image.getWidth();
-        tmpx = (double) panjang/2;
+        tmpx = (double) lebar/2;
         tmpy = (double) panjang/2;
         tengahx = (int) Math.ceil(tmpx);
         tengahy = (int) Math.ceil(tmpy);
@@ -197,6 +257,8 @@ public class AmbilGambarRetakan extends AppCompatActivity {
         int x = 0;
         int y = 0;
 
+        double g1,g2,g3,g4;
+
         for (int i = 0; i < row; i++) {
             y = 0;
             for (int j = 0; j < col; j++) {
@@ -208,66 +270,22 @@ public class AmbilGambarRetakan extends AppCompatActivity {
 //                    ImageIO.write(SubImgage, "jpg", outputfile);
                     if(i == 0){
                         baris1.setImageBitmap(cropedBitmap);
-
-//                        ByteArrayOutputStream baos = new ByteArrayOutputStream();
-//                        cropedBitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
-//                        byte[] imageInByte = baos.toByteArray();
-//                        try { baos.close(); }
-//                        catch (IOException e) { e.printStackTrace(); }
-//
-//                        StringBuilder check = new StringBuilder();
-//                        for(int a = 0; a < imageInByte.length; a++)
-//                        {
-//                            check.append(Integer.toBinaryString(imageInByte[i]));
-//                        }
-//
-//                        String array[] = check.toString().split("");
-//                        for (int a = 0; a<array.length;a++){
-//                            System.out.print(array[a]+" ");
-//                        }
-//                        System.out.println("Panjang array = "+array.length+" tinggi = "+cropedBitmap.getHeight()+" lebar = "+cropedBitmap.getWidth());
-//
-//                        String array2[][] = new String[cropedBitmap.getHeight()][cropedBitmap.getWidth()];
-//                        int isi = 0;
-//                        for(int a = 0; a < cropedBitmap.getHeight(); a++){
-//                            for(int b = 0; b < cropedBitmap.getWidth(); b++){
-//                                array2[a][b] = array[isi];
-//                                isi++;
-//                                System.out.print(array2[a][b]+" ");
-//                            }
-//                            System.out.println();
-//                        }
+                        getImageData(cropedBitmap,1);
 
                     }
                     else if(i == 1){
                         baris2.setImageBitmap(cropedBitmap);
+                        getImageData(cropedBitmap,2);
 
-                        int height = cropedBitmap.getHeight();
-                        int width = cropedBitmap.getWidth();
-                        int[][] pixels = new int[height][width];
-
-                        for( int a = 0; a < height; a++ ) {
-                            for (int b = 0; b < width; b++) {
-                                pixels[a][b] = cropedBitmap.getPixel(a,b);
-                                System.out.print(pixels[a][b]+" ");
-                            }
-                            System.out.println();
-                        }
                     }
                     else if(i == 2){
                         baris3.setImageBitmap(cropedBitmap);
-
-//                        int pix[][]= new int[cropedBitmap.getHeight()][cropedBitmap.getWidth()];
-//                        for(int a = 0; a < cropedBitmap.getHeight(); a++){
-//                            for(int b = 0; b < cropedBitmap.getWidth(); b++){
-//                                System.out.print(pix[a][b]+" ");
-//                            }
-//                            System.out.println();
-//                        }
+                        getImageData(cropedBitmap,3);
 
                     }
                     else if(i == 3){
                         baris4.setImageBitmap(cropedBitmap);
+                        getImageData(cropedBitmap,4);
                     }
 
                     y += eWidth;
@@ -276,12 +294,121 @@ public class AmbilGambarRetakan extends AppCompatActivity {
                     e.printStackTrace();
                 }
             }
+//            if(Build.VERSION.SDK_INT>=Build.VERSION_CODES.M) {
+//                if (checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_DENIED) {
+//                    String[] permissions = {Manifest.permission.WRITE_EXTERNAL_STORAGE};
+//                    requestPermissions(permissions, WRITE_EXTERNAL);
+//                }
+//                else{
+//                    saveToTxt(data_txt);
+//                }
+//            }
+//            else {
+//                saveToTxt(data_txt);
+//            }
 
             x += eHeight;
         }
 
+        data_txt = d1+" # "+d2+" # "+d3+" # "+d4+" # "+dd1+" # "+dd2+" # "+dd3+" # "+dd4;
+
+        saveToTxt(data_txt);
+
 
     }
+
+//    @Override
+//    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+//        switch (requestCode){
+//            case WRITE_EXTERNAL: {
+//                if (grantResults.length > 0 && grantResults[0]==PackageManager.PERMISSION_GRANTED){
+//                    saveToTxt(data_txt);
+//                }
+//                else {
+//                    Toast.makeText(this, "Permisi diperlukan", Toast.LENGTH_SHORT).show();
+//                }
+//            }
+//        }
+//    }
+
+    public void  saveToTxt(String data){
+        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss",
+                Locale.getDefault()).format(System.currentTimeMillis());
+        try{
+            File path = Environment.getExternalStorageDirectory();
+            File dir = new File(path + "/My Files/");
+            dir.mkdirs();
+            String fileName = "MyFile_" + timeStamp + ".txt";
+            File file = new File(dir,fileName);
+
+            FileWriter fw =new FileWriter(file.getAbsoluteFile());
+            BufferedWriter bw = new BufferedWriter(fw);
+            bw.write(data);
+            bw.close();
+
+            Toast.makeText(this, ""+dir, Toast.LENGTH_SHORT).show();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+    }
+
+    protected void getImageData(Bitmap img, int kode){
+        int w = img.getWidth();
+        int h = img.getHeight();
+        int[] data = new int[w * h];
+        img.getPixels(data, 0, w, 0, 0, w, h);
+
+        int[][] pixel = new int[img.getHeight()][img.getWidth()];
+        System.out.println("tinggi "+img.getHeight()+" lebar "+img.getWidth()+"panjangnya adalah "+data.length);
+        int c=0;
+        int tengahX = img.getWidth()/2;
+        int tengahY = img.getHeight()/2;
+
+        System.out.println("tengah ->: "+tengahY+" "+tengahX);
+        for( int a = 0; a < img.getHeight(); a++ ) {
+            for (int b=0;b<img.getWidth();b++){
+                pixel[a][b]=data[c];
+                c++;
+                System.out.print(pixel[a][b]+" ");
+            }
+            System.out.println();
+        }
+        double d=0;
+        double dd=0;
+        int jum_o=0;
+        for(int a=0;a<img.getHeight();a++){
+            for(int b=0;b<img.getWidth();b++){
+                if(pixel[a][b]==0){
+                    d=d + Math.sqrt(Math.pow(a-tengahY,2)+Math.pow(b-tengahX,2));
+                    dd=dd + Math.sqrt(Math.pow(a-tengahy,2)+Math.pow(b-tengahx,2));
+                    jum_o++;
+                }
+            }
+        }
+        System.out.println("jum d -> "+d+" d2 -> "+dd+" jum 0 -> "+jum_o);
+        if(kode==1){
+            d1=d/jum_o;
+            dd1=dd/jum_o;
+            System.out.println("jum rata -> "+d1+" jum rata2 "+dd1);
+        }
+        else if(kode==2){
+            d2=d/jum_o;
+            dd2=dd/jum_o;
+            System.out.println("jum rata -> "+d2+" jum rata2 "+dd2);
+        }
+        else if(kode==3){
+            d3=d/jum_o;
+            dd3=dd/jum_o;
+            System.out.println("jum rata -> "+d3+" jum rata2 "+dd3);
+        }
+        else if(kode==4){
+            d4=d/jum_o;
+            dd4=dd/jum_o;
+            System.out.println("jum rata -> "+d4+" jum rata2 "+dd4);
+        }
+    }
+
 
     public Bitmap convertBitmap(Bitmap input) {
         int width = input.getWidth();
@@ -320,6 +447,8 @@ public class AmbilGambarRetakan extends AppCompatActivity {
         }
         return secondPass;
     }
+
+
 
 
 }

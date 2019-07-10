@@ -20,7 +20,7 @@ public class SQLiteHelper extends SQLiteOpenHelper {
                            String longi, byte[] image, String nama, String alamat, String hp){
         SQLiteDatabase database = getWritableDatabase();
 
-        String sql = "INSERT INTO data_bangunan VALUES(NULL,?,?,?,?,?,?,?,?,?,?)";
+        String sql = "INSERT INTO data_bangunan VALUES(NULL,?,?,?,?,?,?,?,?,?,?,null,null)";
 
         SQLiteStatement statement = database.compileStatement(sql);
         statement.clearBindings();
@@ -39,6 +39,18 @@ public class SQLiteHelper extends SQLiteOpenHelper {
         statement.executeInsert();
 
     }
+    public void updateDataLevel(String data, double persen, int id){
+        SQLiteDatabase database = getWritableDatabase();
+        String sql = "UPDATE data_bangunan SET hasil_diagnosis = ?, tingkat_kepercayaan = ? WHERE id = ?";
+        SQLiteStatement statement = database.compileStatement(sql);
+        statement.bindString(1,data);
+        statement.bindDouble(2, persen);
+        statement.bindDouble(3,(double) id);
+
+        statement.execute();
+        database.close();
+
+    }
 
     public void insertDataKerusakan (int id_bangunan, int struktur, int level_kerusakan){
         SQLiteDatabase database = getWritableDatabase();
@@ -54,6 +66,18 @@ public class SQLiteHelper extends SQLiteOpenHelper {
 
         statement.executeInsert();
 
+    }
+    public void insertDataGambar (String data){
+        SQLiteDatabase database = getWritableDatabase();
+
+        String sql = "INSERT INTO data_gambar VALUES(?)";
+
+        SQLiteStatement statement = database.compileStatement(sql);
+        statement.clearBindings();
+
+        statement.bindString(1,data);
+
+        statement.executeInsert();
     }
 
     public void updateData(String namaB, String lantai, String thn, String alamatB, String lati,
@@ -103,6 +127,18 @@ public class SQLiteHelper extends SQLiteOpenHelper {
         SQLiteDatabase database = getWritableDatabase();
 
         String sql = "DELETE FROM data_bangunan WHERE id = ?";
+        SQLiteStatement statement = database.compileStatement(sql);
+        statement.clearBindings();
+        statement.bindDouble(1, (double)id);
+
+        statement.execute();
+        database.close();
+    }
+
+    public void deleteData2(int id){
+        SQLiteDatabase database = getWritableDatabase();
+
+        String sql = "DELETE FROM data_kerusakan WHERE id_bangunan = ?";
         SQLiteStatement statement = database.compileStatement(sql);
         statement.clearBindings();
         statement.bindDouble(1, (double)id);

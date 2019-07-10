@@ -12,6 +12,7 @@ public class Model {
     private String nama;
     private String alamat;
     private String hp;
+    private double kepercayaan;
 
     public Model(int id, String nama_b, String lantai, String thn, String alamat_b, String lati,
                  String longi, byte[] poto, String nama, String alamat, String hp){
@@ -28,7 +29,7 @@ public class Model {
         this.hp = hp;
     }
     public Model(int id, String nama_b, String lantai, String thn, String alamat_b, String lati,
-                 String longi, String nama, String alamat, String hp){
+                 String longi, String nama, String alamat, String hp, double kepercayaan){
         this.id = id;
         this.nama_b = nama_b;
         this.lantai = lantai;
@@ -39,6 +40,15 @@ public class Model {
         this.nama = nama;
         this.alamat = alamat;
         this.hp = hp;
+        this.kepercayaan = kepercayaan;
+    }
+
+    public double getKepercayaan() {
+        return kepercayaan;
+    }
+
+    public void setKepercayaan(double kepercayaan) {
+        this.kepercayaan = kepercayaan;
     }
 
     public int getId() {
